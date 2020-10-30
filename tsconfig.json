@@ -11,5 +11,11 @@
     "outDir": "./dist",
     "strict": true,
     "downlevelIteration": true
-  }
+  },
+  "include": [
+    "typescript/**/*.ts"
+  ],
+  "exclude": [
+    "tests/"
+  ]
 }

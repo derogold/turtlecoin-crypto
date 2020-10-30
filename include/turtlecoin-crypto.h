@@ -58,11 +58,19 @@ extern "C"
             static std::string cn_turtle_lite_slow_hash_v1(const std::string data);
             static std::string cn_turtle_lite_slow_hash_v2(const std::string data);
 
+            static std::string cn_upx(const std::string data);
+
             static std::string cn_soft_shell_slow_hash_v0(const std::string data, const uint64_t height);
             static std::string cn_soft_shell_slow_hash_v1(const std::string data, const uint64_t height);
             static std::string cn_soft_shell_slow_hash_v2(const std::string data, const uint64_t height);
 
-            static std::string chukwa_slow_hash(const std::string data);
+            static std::string chukwa_slow_hash_base(
+                const std::string data,
+                const uint32_t iterations,
+                const uint32_t memory,
+                const uint32_t threads);
+            static std::string chukwa_slow_hash_v1(const std::string data);
+            static std::string chukwa_slow_hash_v2(const std::string data);
 
             static uint32_t tree_depth(const uint32_t count);
 
@@ -210,6 +218,11 @@ extern "C"
                 const uint64_t realOutput,
                 const std::string &k,
                 std::vector<std::string> &signatures);
+
+            static uint32_t generateTransactionPow(
+                const std::string serializedTransaction,
+                const size_t nonceOffset,
+                const size_t diff);
         };
     } // namespace Core
 

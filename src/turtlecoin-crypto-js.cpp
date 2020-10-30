@@ -277,11 +277,15 @@ EMSCRIPTEN_BINDINGS(signatures)
     function("cn_turtle_lite_slow_hash_v1", &Core::Cryptography::cn_turtle_lite_slow_hash_v1);
     function("cn_turtle_lite_slow_hash_v2", &Core::Cryptography::cn_turtle_lite_slow_hash_v2);
 
+    function("cn_upx", &Core::Cryptography::cn_upx);
+
     function("cn_soft_shell_slow_hash_v0", &cn_soft_shell_slow_hash_v0);
     function("cn_soft_shell_slow_hash_v1", &cn_soft_shell_slow_hash_v1);
     function("cn_soft_shell_slow_hash_v2", &cn_soft_shell_slow_hash_v2);
 
-    function("chukwa_slow_hash", &Core::Cryptography::chukwa_slow_hash);
+    function("chukwa_slow_hash_base", &Core::Cryptography::chukwa_slow_hash_base);
+    function("chukwa_slow_hash_v1", &Core::Cryptography::chukwa_slow_hash_v1);
+    function("chukwa_slow_hash_v2", &Core::Cryptography::chukwa_slow_hash_v2);
 
     function("tree_depth", &Core::Cryptography::tree_depth);
     function("tree_hash", &Core::Cryptography::tree_hash);
@@ -315,6 +319,7 @@ EMSCRIPTEN_BINDINGS(signatures)
     function("hashToEllipticCurve", &Core::Cryptography::hashToEllipticCurve);
     function("scReduce32", &Core::Cryptography::scReduce32);
     function("hashToScalar", &Core::Cryptography::hashToScalar);
+    function("generateTransactionPow", &Core::Cryptography::generateTransactionPow);
 
     /* Multisig Methods */
     function("calculateMultisigPrivateKeys", &Core::Cryptography::calculateMultisigPrivateKeys);

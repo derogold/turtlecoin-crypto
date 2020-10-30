@@ -1850,9 +1850,8 @@ void cn_turtle_lite_slow_hash_v2(const Nan::FunctionCallbackInfo<v8::Value> &inf
     info.GetReturnValue().Set(prepareResult(functionSuccess, functionReturnValue));
 }
 
-/* Chukwa */
-
-void chukwa_slow_hash(const Nan::FunctionCallbackInfo<v8::Value> &info)
+/* UPX */
+void cn_upx(const Nan::FunctionCallbackInfo<v8::Value> &info)
 {
     /* Setup our return object */
     v8::Local<v8::Value> functionReturnValue = Nan::New("").ToLocalChecked();
@@ -1865,7 +1864,127 @@ void chukwa_slow_hash(const Nan::FunctionCallbackInfo<v8::Value> &info)
     {
         try
         {
-            std::string hash = Core::Cryptography::chukwa_slow_hash(data);
+            std::string hash = Core::Cryptography::cn_upx(data);
+
+            functionReturnValue = Nan::New(hash).ToLocalChecked();
+
+            functionSuccess = true;
+        }
+        catch (const std::exception &)
+        {
+            functionSuccess = false;
+        }
+    }
+
+    info.GetReturnValue().Set(prepareResult(functionSuccess, functionReturnValue));
+}
+
+/* Chukwa */
+
+void generateTransactionPow(const Nan::FunctionCallbackInfo<v8::Value> &info)
+{
+    v8::Local<v8::Value> functionReturnValue = Nan::New(0);
+
+    bool functionSuccess = false;
+
+    std::string serializedTransaction = getString(info, 0);
+    size_t nonceOffset = (size_t)getUInt32(info, 1);
+    size_t diff = (size_t)getUInt32(info, 2);
+    
+    try
+    {
+        const uint32_t nonce = Core::Cryptography::generateTransactionPow(serializedTransaction, nonceOffset, diff);
+        functionReturnValue = Nan::New(nonce);
+        functionSuccess = true;
+    }
+    catch (const std::exception &)
+    {
+        functionSuccess = false;
+    }
+
+    info.GetReturnValue().Set(prepareResult(functionSuccess, functionReturnValue));
+}
+
+void chukwa_slow_hash_base(const Nan::FunctionCallbackInfo<v8::Value> &info)
+{
+    /* Setup our return object */
+    v8::Local<v8::Value> functionReturnValue = Nan::New("").ToLocalChecked();
+
+    bool functionSuccess = false;
+
+    std::string data = getString(info, 0);
+
+    uint32_t iterations = getUInt32(info, 1);
+
+    uint32_t memory = getUInt32(info, 2);
+
+    uint32_t threads = getUInt32(info, 3);
+
+    if (!data.empty() && iterations != 0 && memory != 0 && threads != 0)
+    {
+        try
+        {
+            std::string hash = Core::Cryptography::chukwa_slow_hash_base(
+                data,
+                iterations,
+                memory,
+                threads);
+
+            functionReturnValue = Nan::New(hash).ToLocalChecked();
+
+            functionSuccess = true;
+        }
+        catch (const std::exception &)
+        {
+            functionSuccess = false;
+        }
+    }
+
+    info.GetReturnValue().Set(prepareResult(functionSuccess, functionReturnValue));
+}
+
+void chukwa_slow_hash_v1(const Nan::FunctionCallbackInfo<v8::Value> &info)
+{
+    /* Setup our return object */
+    v8::Local<v8::Value> functionReturnValue = Nan::New("").ToLocalChecked();
+
+    bool functionSuccess = false;
+
+    std::string data = getString(info, 0);
+
+    if (!data.empty())
+    {
+        try
+        {
+            std::string hash = Core::Cryptography::chukwa_slow_hash_v1(data);
+
+            functionReturnValue = Nan::New(hash).ToLocalChecked();
+
+            functionSuccess = true;
+        }
+        catch (const std::exception &)
+        {
+            functionSuccess = false;
+        }
+    }
+
+    info.GetReturnValue().Set(prepareResult(functionSuccess, functionReturnValue));
+}
+
+void chukwa_slow_hash_v2(const Nan::FunctionCallbackInfo<v8::Value> &info)
+{
+    /* Setup our return object */
+    v8::Local<v8::Value> functionReturnValue = Nan::New("").ToLocalChecked();
+
+    bool functionSuccess = false;
+
+    std::string data = getString(info, 0);
+
+    if (!data.empty())
+    {
+        try
+        {
+            std::string hash = Core::Cryptography::chukwa_slow_hash_v2(data);
 
             functionReturnValue = Nan::New(hash).ToLocalChecked();
 
@@ -2063,6 +2182,11 @@ NAN_MODULE_INIT(InitModule)
         Nan::New("underivePublicKey").ToLocalChecked(),
         Nan::GetFunction(Nan::New<v8::FunctionTemplate>(underivePublicKey)).ToLocalChecked());
 
+    Nan::Set(
+        target,
+        Nan::New("generateTransactionPow").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(generateTransactionPow)).ToLocalChecked());
+
     /* Hashing Operations */
     Nan::Set(
         target,
@@ -2166,8 +2290,23 @@ NAN_MODULE_INIT(InitModule)
 
     Nan::Set(
         target,
-        Nan::New("chukwa_slow_hash").ToLocalChecked(),
-        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(chukwa_slow_hash)).ToLocalChecked());
+        Nan::New("cn_upx").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(cn_upx)).ToLocalChecked());
+
+    Nan::Set(
+        target,
+        Nan::New("chukwa_slow_hash_base").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(chukwa_slow_hash_base)).ToLocalChecked());
+
+    Nan::Set(
+        target,
+        Nan::New("chukwa_slow_hash_v1").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(chukwa_slow_hash_v1)).ToLocalChecked());
+
+     Nan::Set(
+         target,
+         Nan::New("chukwa_slow_hash_v2").ToLocalChecked(),
+         Nan::GetFunction(Nan::New<v8::FunctionTemplate>(chukwa_slow_hash_v2)).ToLocalChecked());
 }
 
 NODE_MODULE(turtlecoincrypto, InitModule);
